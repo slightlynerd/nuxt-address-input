@@ -1,5 +1,5 @@
 <template>
-  <div class="flex form go-bottom">
+  <div class="flex items-end form go-bottom">
     <select v-model="type" class="select">
       <option value="address">
         Residential
@@ -14,16 +14,19 @@
         Operational
       </option>
     </select>
-    <!-- <div class="bg-white p-40">
-      <button v-tooltip="'You have new messages.'" class="has-tooltip v-tooltip-open">ghghg</button>
-    </div> -->
-    <div class="form-control">
+    <div class="form-control ml-8">
+      <button
+        v-if="showTooltip"
+        v-tooltip.bottom="'Start typing address to get suggestions from Google'"
+        class="h-8 text-white border border-white btn-tooltip"
+      >
+        ?
+      </button>
       <input id="address" ref="searchTextField" type="text" placeholder="Address" autocomplete="off">
       <label for="address">Address</label>
       <button
         v-if="selectedPlace && selectedPlace.formatted_address.length"
         @click="clearAddress"
-        v-tooltip="'You have new messages.'"
         class="btn-clear"
       >
         x
@@ -37,7 +40,14 @@
       </button>
     </div>
     <div v-if="showNumber" class="form-control">
-      <input id="num" @blur="addAddressNumber" v-model="addressNumber" type="text" placeholder="Number">
+      <input
+        id="num"
+        @blur="addAddressNumber"
+        v-model="addressNumber"
+        type="text"
+        placeholder="No."
+        class="add-num"
+      >
       <label for="num">N<sup>o</sup></label>
     </div>
   </div>
@@ -47,6 +57,12 @@
 /* eslint-disable no-undef */
 
 export default {
+  props: {
+    showTooltip: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       type: 'address',
@@ -54,7 +70,13 @@ export default {
       autocomplete: '',
       showNumber: false,
       selectedPlace: '',
-      addressNumber: ''
+      addressNumber: '',
+      options: ''
+    }
+  },
+  watch: {
+    type (val) {
+      this.initializeInput(this.$refs.searchTextField, this.options)
     }
   },
   mounted () {
@@ -62,21 +84,25 @@ export default {
     const defaultBounds = new google.maps.LatLngBounds(
       new google.maps.LatLng(-33.8902, 151.1759),
       new google.maps.LatLng(-33.8474, 151.2631))
-    const options = {
+    this.options = {
       bounds: defaultBounds,
-      types: ['address']
+      types: [this.type]
     }
-    this.autocomplete = new google.maps.places.Autocomplete(
-      input, options
-    )
-    google.maps.event.addListener(this.autocomplete, 'place_changed', (e) => {
-      this.showNumber = true
-      this.selectedPlace = this.autocomplete.getPlace()
-    })
+    this.initializeInput(input, this.options)
   },
   methods: {
+    initializeInput (input, options) {
+      this.autocomplete = new google.maps.places.Autocomplete(
+        input, options
+      )
+      google.maps.event.addListener(this.autocomplete, 'place_changed', () => {
+        this.showNumber = true
+        this.selectedPlace = this.autocomplete.getPlace()
+      })
+    },
     addAddressNumber () {
-      this.$refs.searchTextField.value = `${this.addressNumber}, ${this.selectedPlace.formatted_address}`
+      const addNum = this.addressNumber.length ? `${this.addressNumber}, ` : ''
+      this.$refs.searchTextField.value = `${addNum}${this.selectedPlace.formatted_address}`
       this.showNumber = false
       this.addressNumber = ''
     },
@@ -98,10 +124,23 @@ select:focus, input:focus {
   background: transparent;
   color: #fff;
   border-bottom: 1px solid #fff;
+  padding: 12px;
 }
 .form-control {
   position: relative;
-  margin: 0 10px;
+  padding-left: 30px;
+}
+
+.form-control .btn-tooltip {
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  line-height: 0.7;
+  z-index: 20;
+  font-size: 12px;
 }
 
 .form-control .btn-clear {
@@ -143,6 +182,10 @@ select:focus, input:focus {
   color: #fff;
 }
 
+.form-control input.add-num {
+  width: 64px;
+}
+
 .form-control input:valid {
   background: #000;
 }
@@ -182,23 +225,10 @@ select:focus, input:focus {
   margin: 0 auto;
   background-color: #000;
 }
+
 .form.go-bottom input:focus + label {
   top: 100%;
   margin-top: -10px;
-}
-.tooltip .popover {
-  color: #f9f9f9;
-}
-
-.tooltip .popover-inner {
-  background: #fff;
-  color: #fff;
-  padding: 24px;
-  border-radius: 5px;
-  box-shadow: 0 5px 30px rgba(black, .1);
-}
-
-.tooltip .popover-arrow {
-  border-color: #fff;
+  margin-left: 44%;
 }
 </style>

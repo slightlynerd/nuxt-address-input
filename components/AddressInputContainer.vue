@@ -2,7 +2,7 @@
   <div>
     <div v-for="(item, index) in addresses" :key="item.id">
       <div class="flex">
-        <AddressInput @add-new-address="addAddress" />
+        <AddressInput @add-new-address="addAddress" show-tooltip />
         <button v-if="index !== 0" @click="removeAddress(index)" class="text-red-500">
           x
         </button>

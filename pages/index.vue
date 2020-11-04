@@ -2,11 +2,8 @@
   <div class="container">
     <div>
       <logo />
-      <!-- <h1 class="title">
-        address-input
-      </h1> -->
       <h2 class="subtitle">
-        field to input an address
+        Enter your address
       </h2>
       <AddressInputContainer />
     </div>
@@ -38,16 +35,6 @@ html, body {
   text-align: center;
 }
 
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
 .subtitle {
   font-weight: 300;
   font-size: 42px;
@@ -56,7 +43,27 @@ html, body {
   padding-bottom: 15px;
 }
 
-.links {
-  padding-top: 15px;
+.tooltip .tooltip-inner {
+  background: #fff;
+  color: #000;
+  font-size: 12px;
+  border-radius: 16px;
+  padding: 5px 10px 4px;
+  z-index: 20px;
+  width: 150px;
+  text-align-last: center;
+}
+
+.tooltip .popover-inner {
+  background: #fff;
+  color: #000;
+  padding: 24px;
+  border-radius: 5px;
+  box-shadow: 0 5px 30px rgba(black, .1);
+  z-index: 20px;
+}
+
+.tooltip .popover-arrow {
+  border-color: #fff;
 }
 </style>
