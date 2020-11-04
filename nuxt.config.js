@@ -1,9 +1,6 @@
 
 module.exports = {
-  mode: 'universal',
-  privateRuntimeConfig: {
-    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
-  },
+  ssr: true,
   /*
   ** Headers of the page
   */
@@ -19,7 +16,7 @@ module.exports = {
     ],
     script: [
       {
-        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBzXIUvyEfFV7t7kmkengXi2UcIAQ7toXk&libraries=places`
+        src: `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&libraries=places`
       }
     ]
   },
@@ -44,9 +41,7 @@ module.exports = {
   ** Nuxt.js dev-modules
   */
   buildModules: [
-    // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
-    // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
     '@nuxtjs/tailwindcss'
   ],
   /*
