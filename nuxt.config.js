@@ -1,6 +1,9 @@
 
 module.exports = {
   mode: 'universal',
+  privateRuntimeConfig: {
+    googleMapsApiKey: process.env.GOOGLE_MAPS_API_KEY
+  },
   /*
   ** Headers of the page
   */
@@ -13,6 +16,11 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {
+        src: `https://maps.googleapis.com/maps/api/js?key=AIzaSyBzXIUvyEfFV7t7kmkengXi2UcIAQ7toXk&libraries=places`
+      }
     ]
   },
   /*
@@ -28,6 +36,9 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    {
+      src: '~/plugins/Tooltip.js'
+    }
   ],
   /*
   ** Nuxt.js dev-modules
@@ -43,6 +54,10 @@ module.exports = {
   */
   modules: [
   ],
+  /*
+   ** Telemetry
+   */
+  telemetry: false,
   /*
   ** Build configuration
   */
